@@ -59,6 +59,19 @@ export const boardSlice = createSlice({
                 lists: updatedLists
             };
         },
+        deleteTaskReducer: (state, action) => {
+            const { listId, taskId } = action.payload;
+            const updatedLists = state.lists.map(list =>
+                list.listId === listId ? {
+                    ...list,
+                    tasks: list.tasks.filter(task => task.taskId !== taskId)
+                } : list
+            );
+            return {
+                ...state,
+                lists: updatedLists
+            };
+        },
         editListTitleReducer: (state, action) => {
             const { listId, updatedListTitle } = action.payload;
             const updatedLists = state.lists.map(list =>
@@ -140,7 +153,46 @@ export const boardSlice = createSlice({
                         lists: stateCopy
                     };
                 }
+                else {
+                    // first we extract the dragged task from source list and update the source list
+                    const sourceListIndex = stateCopy.findIndex(list => list.listId === source.droppableId);
+                    const sourceListCopy = stateCopy[sourceListIndex];
+                    const sourceTaskCopy = sourceListCopy.tasks;
+                    const [removedSourceTasksCopy] = removedSourceTasksCopy.splice(source.index, 1);
+                    sourceListCopy.tasks = sourceTasksCopy;
+                    stateCopy[sourceListIndex] = sourceListCopy;
+                    // finally, we place the dragged task inside the destination list and update the destination list
+                    const destinationListIndex = stateCopy.findIndex(list => list.listId === destination.droppableId);
+                    const destinationListCopy = stateCopy[destinationListIndex];
+                    const destinationTasksCopy = destinationListCopy.tasks;
+                    destinationTasksCopy.splice(destination.index, 0, removedSourceTasksCopy);
+                    destinationListCopy.tasks = destinationTasksCopy;
+                    stateCopy[destinationListIndex] = destinationListCopy;
+                    return {
+                        ...state,
+                        lists: stateCopy
+                    };
+                }
             }
-        }
-    }
-)  
+        },
+        // do not edit below this line
+        resetStateReducer: (state) => {
+            return {
+                lists: []
+            };
+        },
+    },
+})
+
+export const {
+    createNewListReducer,
+    createNewTaskReducer,
+    deleteListReducer,
+    deleteTaskReducer,
+    editListTitleReducer,
+    editTaskReducer,
+    dragReducer,
+    resetStateReducer
+} = boardSlice.actions
+
+export default boardSlice.reducer
