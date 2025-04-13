@@ -46,6 +46,81 @@ export const boardSlice = createSlice({
                 }
                 return list;
             });
+            return {
+                ...state,
+                lists: updatedLists
+            };
+        },
+        deleteListReducer: (state, action) => {
+            const { listID } = action.payload;
+            const updatedLists = state.lists.filter(list => list.listId !== listId);
+            return {
+                ...state,
+                lists: updatedLists
+            };
+        },
+        editListTitleReducer: (state, action) => {
+            const { listId, updatedListTitle } = action.payload;
+            const updatedLists = state.lists.map(list =>
+                list.listId === listId
+                    ? { ...list, listTitle: updatedListTitle }
+                    : list 
+            );
+            return {
+                ...state,
+                lists:updatedLists
+            };
+        },
+        editTaskReducer: (state, action) => {
+            const { listId, taskId, updatedTaskTitle, updatedTaskDescription } = action.payload;
+            const updatedLists = state.lists.map(list =>
+                list.listId === listId
+                    ? {
+                        ...list,
+                        tasks: list.tasks.map(task =>
+                            task.taskId === taskId
+                                ? { ...task, taskTitle: updatedTaskTitle, taskDescription: updatedTaskDescription }
+                                : task
+                        )
+                    }
+                : list
+            );
+            return {
+                ...state,
+                lists: updatedLists
+            };
+        },
+        dragReducer: (state, action) => {
+            const { results } = action.payload;
+            const { source , destination, type } = results;
+            if (!destination) {
+                return;
+            }
+            // dragging lists around
+            if (type === "listDrag") {
+                // If tasks are being dragged in board droppable, then we return
+                if (source.droppableId !== "boardDroppable" || destination.droppableId !== "boardDroppable") {
+                    return;
+                }
+                // list dragged and dropped at the same position
+                if (source.index === destination.index) {
+                    return;
+                }
+                const stateCopy = state.lists.map(list => ({
+                    ...list,
+                    tasks: [...list.tasks.map(task => ({ ...task }))]
+                }));
+                const [removedList] = stateCopy.splice(source.index, 1);
+                stateCopy.splice(destination.index, 0, removedList);
+                return {
+                    ...state,
+                    lists: stateCopy
+                };
+            }
+            else {
+                // task dragged and dropped at the same position
+                if ((source.droppableId))
+            }
         }
     }
 )  
