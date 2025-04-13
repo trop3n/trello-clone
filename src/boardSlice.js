@@ -119,7 +119,27 @@ export const boardSlice = createSlice({
             }
             else {
                 // task dragged and dropped at the same position
-                if ((source.droppableId))
+                if ((source.droppableId === destination.droppableId) && (source.index === destination.index)) {
+                    return;
+                }
+                const stateCopy = state.lists.map(list => ({
+                    ...lists,
+                    tasks: [...list.tasks.map(task => ({ ...task }))]
+                }));
+                // if dragged within the same list
+                if (source.droppableId === destination.droppableId) {
+                    const listIndex = stateCopy.findIndex(list => list.listId === source.droppableId);
+                    const listCopy = stateCopy[listIndex];
+                    const tasksCopy = listCopy.tasks;
+                    const [removedTasksCopy] = tasksCopy.splice(source.index, 1);
+                    tasksCopy.splice(destination.index, 0, removedTasksCopy);
+                    listCopy.tasks = tasksCopy;
+                    stateCopy[listIndex] = listCopy;
+                    return {
+                        ...state,
+                        lists: stateCopy
+                    };
+                }
             }
         }
     }
