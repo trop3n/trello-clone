@@ -68,8 +68,19 @@ const List = ({ list }) => {
                     <ModeEditIcon data-testid='list-title-edit' style={{ fontSize: "25px", marginLeft: "15%" }} onClick={() => openModal()}/>
                 </div>
             </div>
-            <div data-testid='list-data' className='list-content-empty'>
-                <h2> No tasks available! </h2>
+            <div data-testid='list-data' className={list.tasks.length === 0 ? 'list-content-empty' : 'list-content'}>
+                {list.tasks.length === 0 ? (
+                    <h2> No tasks available! </h2>
+                ) : (
+                    list.tasks.map((task) => (
+                        <div key={task.taskId}>
+                            <Task
+                                list={list}
+                                task={task}
+                            />
+                        </div>
+                    ))
+                )}
             </div>
             <div className="list-edit">
                 <div className="list-edit-part-one">
