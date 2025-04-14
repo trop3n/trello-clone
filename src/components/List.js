@@ -9,7 +9,30 @@ import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import CloseIcon from '@mui/icons-material/Close';
 import Task from '../components/Task';
 
-const List = () => {
+const List = ({ list }) => {
+
+    const dispatch = useDispatch();
+
+    const [taskValue, setTaskValue] = useState('');
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modalText, setModalText] = useState('');
+
+    const openModal = () => setIsModalOpen(true);
+    const closeModal = () => {
+        setModalText('');
+        setIsModalOpen(false);
+    }
+
+    const editListTitle = async () => {
+        if (modalText === "") {
+            window.alert("Please enter updated list name");
+            return;
+        }
+        dispatch(editListTitleReducer({listId: list.listId, updatedListTitle: modalText}));
+        setModalText('');
+        closeModal();
+    }
 
     return (
         <div>
