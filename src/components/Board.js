@@ -7,9 +7,12 @@ import { createNewListReducer, dragReducer } from '../boardSlice';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 import List from '../components/List';
-import { BiLeftArrow } from 'react-icons/bi';
+
 
 const Board = () => {
+
+    const lists = useSelector((state) => state.board.lists);
+    const dispatch = useDispatch();
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalText, setModalText] = useState('');
@@ -25,6 +28,7 @@ const Board = () => {
             window.alert("Please enter a list name");
             return;
         }
+        dispatchEvent(createNewListReducer({listTitle: modalText}));
         setModalText('');
         closeModal();
     }
@@ -41,11 +45,27 @@ const Board = () => {
             alignItems: 'center',
             justifyContent: 'center',
         },
+        overlay: {
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
     };
 
     return (
         <div className="board-container">
             <div className="board">
+                {lists.length !== 0 && (
+                    <>
+                        {lists.map((list) => (
+                            <List
+                                key={list.listId}
+                                list={list}
+                            />
+                        ))}
+                    </>
+                )}
             </div>
             <div className="board-button">
                 <button data-testid='list-add' className="list-add" onClick={() => openModal()}>

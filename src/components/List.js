@@ -34,9 +34,80 @@ const List = ({ list }) => {
         closeModal();
     }
 
+    const deleteList = async () => {
+        dispatch(deleteListReducer({listId: list.listId}));
+    }
+
+    const modalStyles = {
+        content: {
+            minWidth: '500px',
+            minHeight: '500px',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+        overlay: {
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+    };
+
     return (
-        <div>
-            
+        <div data-testid='list' className="list">
+            <div className="list-title">
+                <div className="list-title-part-one">
+                    <h2 data-testid='list-title' className="list-title-text"> {list.listTitle } </h2>
+                </div>
+                <div className="list-title-part-two">
+                    <ModeEditIcon data-testid='list-title-edit' style={{ fontSize: "25px", marginLeft: "15%" }} onClick={() => openModal()}/>
+                </div>
+            </div>
+            <div data-testid='list-data' className='list-content-empty'>
+                <h2> No tasks available! </h2>
+            </div>
+            <div className="list-edit">
+                <div className="list-edit-part-one">
+                    <input
+                        type="text"
+                        value={taskValue}
+                        onChange={(event) => setTaskValue(event.target.value)}
+                        placeholder="Add Task"
+                        className="list-edit-input"
+                        data-testid='list-task-add-section-input'
+                    />
+                    <AddIcon data-testid='list-task-add-section-add-task' style={{ fontSize: "40px", marginLeft: "10%" }}/>
+                </div>
+                <div className="list-edit-part-two">
+                    <button data-testid='delete-list-button' className="list-edit-button" onClick={() => deleteList()}> Delete </button>
+                </div>
+            </div>
+            <Modal
+                isOpen={isModalOpen}
+                ariaHideApp={false}
+                onRequestClose={() => closeModal()}
+                style={modalStyles}
+                testId='list-title-edit-modal'
+            >
+                <CloseIcon data-testid='list-title-edit-modal-close' style={{ fontSize: "3.5em", color: "red", position: "absolute", top: 0, right: 0, padding: "10px" }} onClick={() => closeModal()}/>
+                <h2 data-testid='list-title-in-modal' style={{ marginBotton: "4%", fontSize: "2em" }}>
+                    Current list name: <span style={{ color: "909091" }}>{list.listTitle}</span>
+                </h2>
+                <input
+                    type="text"
+                    value={modalText}
+                    onChange={(event) => setModalText(event.target.value)}
+                    placeholder="Enter new list name"
+                    className="modal-input"
+                    data-testid='list-title-edit-input'
+                />
+                <button data-testid='edit-list-title-button' className="modal-button" onClick={() => editListTitle()}> Update list name</button>
+            </Modal>
         </div>
     );
 };
