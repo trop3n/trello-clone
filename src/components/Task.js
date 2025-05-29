@@ -82,9 +82,30 @@ const Task = ({ list, task }) => {
                 testId='task-edit-modal'
             >
                 <CloseIcon data-testid='task-edit-modal-close' style={{ fontSize: "40px", color: "red", position: "absolute", top: 0, right: 0, padding: "10px" }} onClick={() => closeModal()}/>
-                
+                <div className='task-modal-part-one'>
+                    <h2 data-testid='list-name' style={{ marginTop: "3%", marginBottom: "1%", fontSize: "26px" }}>
+                        List name: <span style={{ color: "#909091" }}>{list.listTitle}</span>
+                    </h2>
+                </div>
+                <div className='task-modal-part-two'>
+                    <div className='task-part'>
+                        <span style={{ marginLeft: "17%", fontSize: "30px" }}> Task title </span>
+                        <input
+                            type="text"
+                            className="task-part-input"
+                            placeholder="Enter task title"
+                            value={modalTaskValue}
+                            onChange={(event) => setModalTaskValue(event.target.value)}
+                            data-testid='task-title-edit-input'
+                        />
+                    </div>
+                </div>
+                <div className='task-modal-part-three'>
+                    <button data-testid='task-update-button' className="task-modal-button" onClick={() => editTask()}> Update task details </button>
+                </div>
             </Modal>
         </div>
-    )
+    );
+}
 
 export default Task;
