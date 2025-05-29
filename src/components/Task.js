@@ -35,8 +35,27 @@ const Task = ({ list, task }) => {
             {
                 listId: list.listId,
                 taskId: task.taskID,
+                updatedTaskTitle: modalTaskValue,
+                updatedTaskDescription: modalDescriptionValue
             }
-        ))
+        ));
+        closeModal;
+    }
+
+    const deleteTask = async () => {
+        dispatch(deleteTaskReducer({listId: list.listId, taskId: task.taskId}));
+    }
+
+    const modalStyles = {
+        content: {
+            minWidth: '500px',
+            minHeight: '500px',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            display: 'flex',
+            flexDirection: 'column'
+        }
     }
 
 export default Task;
