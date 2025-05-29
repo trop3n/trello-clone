@@ -55,7 +55,36 @@ const Task = ({ list, task }) => {
             transform: 'translate(-50%, -50%)',
             display: 'flex',
             flexDirection: 'column'
-        }
-    }
+        },
+        overlay: {
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+    };
+
+    return (
+        <div data-testid='task' className="Task">
+            <div className="task-title">
+                <span data-testid='task-title' className="task-title-text"> { task.taskTitle } </span>
+            </div>
+            <div className="task-modify">
+                <ModeEditIcon data-testid='task-edit' style={{ fontSize: "20px", marginRight: "10%" }} onClick={() => openModal()}/>
+                <CloseIcon data-testid='task-delete' style={{ fontSize: "20px", color: "red" }} onClick={() => deleteTask()}/>
+            </div>
+
+            <Modal
+                isOpen={isModalOpen}
+                ariaHideApp={false}
+                onRequestClose={() => closeModal()}
+                style={modalStyles}
+                testId='task-edit-modal'
+            >
+                <CloseIcon data-testid='task-edit-modal-close' style={{ fontSize: "40px", color: "red", position: "absolute", top: 0, right: 0, padding: "10px" }} onClick={() => closeModal()}/>
+                
+            </Modal>
+        </div>
+    )
 
 export default Task;
