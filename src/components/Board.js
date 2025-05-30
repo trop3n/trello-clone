@@ -55,6 +55,38 @@ const Board = () => {
 
     return (
         <div className="board-container">
+            <DragDropContext onDragStart={() => console.log('Drag Started')} onDragEnd={async (results) => dispatch(dragReducer({results: results}))}>
+                <Droppable droppableId="boardDroppable" type="listDrag" direction="horizontal">
+                    {(provided) => (
+                        <div
+                            className="board"
+                            ref={provided.innerRef}
+                            {...provided.droppableProps}
+                        >
+                            {lists.length !== 0 && (
+                                <>
+                                    {lists.map((list, index) => (
+                                        <Draggable draggableId={list.listId} key={list.listId} index={index}>
+                                            {(provided) => (
+                                                <div
+                                                    {...provided.dragHandleProps}
+                                                    {...provided.draggableProps}
+                                                    ref={provided.innerRef}
+                                                    data-testid='draggable-list'
+                                                >
+                                                    <List
+                                                        list={list}
+                                                    />
+                                                </div>
+                                            )}
+                                        </Draggable>
+                                    ))}
+                                </>
+                            )}
+                        </div>
+                    )}
+                </Droppable>
+            </DragDropContext>
             <div className="board">
                 {lists.length !== 0 && (
                     <>
