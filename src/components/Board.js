@@ -87,32 +87,20 @@ const Board = () => {
                     )}
                 </Droppable>
             </DragDropContext>
-            <div className="board">
-                {lists.length !== 0 && (
-                    <>
-                        {lists.map((list) => (
-                            <List
-                                key={list.listId}
-                                list={list}
-                            />
-                        ))}
-                    </>
-                )}
-            </div>
             <div className="board-button">
                 <button data-testid='list-add' className="list-add" onClick={() => openModal()}>
                     <AddIcon style={{ fontSize: "2em", color: "black" }}/>
                     <h2 className="list-add-text"> Create a new list </h2>
                 </button>
             </div>
-            <Modal
+            <Modal 
                     isOpen={isModalOpen}
-                    ariaHideApp={false}
+                    araiHideApp={false}
                     onRequestClose={() => closeModal()}
                     style={modalStyles}
                     testId='list-add-modal'
                 >
-                    <CloseIcon data-testid='list-add-modal-close' style={{ fontSize: "40px", color: "red", position: "absolute", top: 0, right: 0, padding: "10px" }} onClick={() => closeModal()}/>
+                    <CloseIcon data-testid='list-add-modal-close' style={{ fontSize: "40px", color: "red", position: "absolute", top:0, right: 0, padding: "10px" }} onClick={() => closeModal()}/>
                     <input
                         type="text"
                         value={modalText}
@@ -122,7 +110,7 @@ const Board = () => {
                         data-testid='list-add-input'
                     />
                     <button data-testid='create-list-button' className="modal-button" onClick={() => addList()}> Create list </button>
-            </Modal>
+                </Modal>
         </div>
     );
 }
